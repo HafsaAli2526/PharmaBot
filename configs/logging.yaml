@@ -1,0 +1,49 @@
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  standard:
+    format: "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    datefmt: "%Y-%m-%dT%H:%M:%S"
+  json:
+    class: pythonjsonlogger.jsonlogger.JsonFormatter
+    format: "%(asctime)s %(levelname)s %(name)s %(message)s"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: standard
+    stream: ext://sys.stdout
+  file:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: json
+    filename: ./data/logs/pharmaai.log
+    maxBytes: 10485760 # 10 MB
+    backupCount: 5
+  error_file:
+    class: logging.handlers.RotatingFileHandler
+    level: ERROR
+    formatter: json
+    filename: ./data/logs/pharmaai.error.log
+    maxBytes: 10485760
+    backupCount: 3
+
+loggers:
+  pharmaai:
+    level: DEBUG
+    handlers: [console, file, error_file]
+    propagate: false
+  uvicorn:
+    level: INFO
+    handlers: [console, file]
+    propagate: false
+  rasa:
+    level: WARNING
+    handlers: [console, file]
+    propagate: false
+
+root:
+  level: WARNING
+  handlers: [console]

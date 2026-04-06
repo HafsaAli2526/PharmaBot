@@ -1,0 +1,159 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hey
+      - hello
+      - hi
+      - good morning
+      - good afternoon
+      - hey there PharmaAI
+      - hello assistant
+      - hi there
+
+  - intent: goodbye
+    examples: |
+      - bye
+      - goodbye
+      - see you later
+      - that's all for now
+      - thanks, goodbye
+      - quit
+      - exit
+
+  - intent: affirm
+    examples: |
+      - yes
+      - yes please
+      - correct
+      - that's right
+      - exactly
+      - sure
+      - go ahead
+
+  - intent: deny
+    examples: |
+      - no
+      - no thanks
+      - that's not what I meant
+      - not really
+      - nope
+
+  - intent: ask_adverse_event
+    examples: |
+      - What are the side effects of [aspirin](drug_name)?
+      - Show me adverse events for [ibuprofen](drug_name)
+      - What reactions have been reported for [metformin](drug_name)?
+      - FAERS reports for [atorvastatin](drug_name)
+      - List adverse drug reactions for [warfarin](drug_name)
+      - What are the known side effects of [lisinopril](drug_name)?
+      - Tell me about adverse events related to [amoxicillin](drug_name)
+      - Pharmacovigilance data for [omeprazole](drug_name)
+      - Any safety signals for [clopidogrel](drug_name)?
+      - Drug reactions for [sertraline](drug_name)
+      - What adverse reactions are associated with [paracetamol](drug_name)?
+      - Safety profile of [simvastatin](drug_name)
+      - Post-market surveillance reports for [adalimumab](drug_name)
+      - What side effects has [pembrolizumab](drug_name) been linked to?
+      - Serious adverse events for [insulin](drug_name)
+
+  - intent: ask_trial_summary
+    examples: |
+      - Summarise the clinical trial [NCT04368728](nct_id)
+      - What are the results of trial [NCT03528525](nct_id)?
+      - Tell me about [NCT04280705](nct_id)
+      - Latest Phase III trials for [lung cancer](drug_name)
+      - What trials are studying [Alzheimer's disease](drug_name)?
+      - Find clinical trials for [diabetes type 2](drug_name)
+      - Phase II study results for [immunotherapy](drug_name)
+      - Summarise randomised controlled trial on [hypertension](drug_name)
+      - What is the status of trial [NCT04516746](nct_id)?
+      - Active clinical studies for [COVID-19 vaccine](drug_name)
+      - Completed Phase III trials for [breast cancer](drug_name)
+      - Clinical research on [CRISPR gene therapy](drug_name)
+      - Results of the [DAPA-HF](nct_id) trial
+      - What endpoints were used in the [EMPEROR-Reduced](nct_id) trial?
+
+  - intent: ask_regulatory_info
+    examples: |
+      - What are the FDA guidelines for drug approval?
+      - Tell me about GMP compliance requirements
+      - What does ISO 13485 cover?
+      - EMA guidelines for biologics
+      - How do I comply with 21 CFR Part 11?
+      - What are the ICH Q10 requirements?
+      - Explain the regulatory pathway for biosimilars
+      - What is required for an NDA submission?
+      - FDA guidance on clinical trial design
+      - What are GCP requirements for clinical research?
+      - Regulatory requirements for combination products
+      - Explain post-approval change regulations
+      - What are the EMA requirements for paediatric studies?
+      - How does the FDA define a serious adverse event?
+      - What is the risk management plan under EMA guidelines?
+      - GLP requirements for preclinical studies
+      - What inspections are required for GMP certification?
+
+  - intent: ask_formula
+    examples: |
+      - What is the chemical structure of [aspirin](compound)?
+      - Tell me the molecular weight of [paracetamol](compound)
+      - Show me the SMILES for [ibuprofen](compound)
+      - What is the dosage for [metformin](compound)?
+      - Drug interaction between [warfarin](compound) and [aspirin](compound)
+      - What is the bioavailability of [amoxicillin](compound)?
+      - Pharmacokinetics of [atorvastatin](compound)
+      - Chemical formula for [glucose](compound)
+      - What excipients are used in [omeprazole](compound) tablets?
+      - Describe the mechanism of action of [lisinopril](compound)
+      - What is the half-life of [diazepam](compound)?
+      - Solubility profile of [naproxen](compound)
+      - Active pharmaceutical ingredient in [Lipitor](compound)
+      - Molecular structure of [penicillin](compound)
+      - What is the receptor binding profile of [olanzapine](compound)?
+
+  - intent: ask_drug_interaction
+    examples: |
+      - Can [aspirin](drug_name) be taken with [warfarin](drug_name)?
+      - Interaction between [metformin](drug_name) and [alcohol](drug_name)
+      - Is it safe to combine [sertraline](drug_name) and [tramadol](drug_name)?
+      - Drug interactions for [fluoxetine](drug_name)
+      - What happens when you mix [digoxin](drug_name) and [amiodarone](drug_name)?
+      - Contraindications for [MAOIs](drug_name) with [SSRIs](drug_name)
+      - Food interactions with [warfarin](drug_name)
+      - Can [statins](drug_name) be combined with [fibrates](drug_name)?
+
+  - intent: ask_news
+    examples: |
+      - What's the latest pharma news?
+      - Recent drug approval news
+      - Latest FDA approvals this week
+      - News about [Pfizer](drug_name)
+      - Recent EMA decisions
+      - Breaking news in pharmaceutical industry
+      - Latest clinical trial results published
+      - Any new drug recalls?
+      - Recent biotech company updates
+      - What drugs were approved recently?
+
+  - intent: notify_event
+    examples: |
+      - Send an alert about the new adverse reaction
+      - Notify the team about the safety signal
+      - Alert me when there's a new FDA approval
+      - Set up notification for [aspirin](drug_name) adverse events
+      - Send Slack notification about trial completion
+      - Email alert for regulatory update
+      - Notify stakeholders about the recall
+
+  - intent: out_of_scope
+    examples: |
+      - What's the weather like?
+      - Tell me a joke
+      - Who won the football game?
+      - Book me a flight
+      - What's the stock price of Apple?
+      - Help me with my homework
+      - What's 2 + 2?
+      - Can you write me a poem?

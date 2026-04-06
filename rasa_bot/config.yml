@@ -1,0 +1,84 @@
+version: "3.1"
+
+recipe: default.v1
+
+language: en
+
+pipeline:
+  # ── Tokenisation ──────────────────────────────────────────────────────────
+  - name: WhitespaceTokenizer
+
+  # ── Feature extraction ────────────────────────────────────────────────────
+  - name: RegexFeaturizer
+
+  - name: LexicalSyntacticFeaturizer
+
+  - name: CountVectorsFeaturizer
+
+  - name: CountVectorsFeaturizer
+    analyzer: char_wb
+    min_ngram: 1
+    max_ngram: 4
+
+  # ── Custom BERT-based dense featurizer (uses local BioBERT) ───────────────
+  # Uncomment when using HFTransformersNLP with local model path:
+  # - name: HFTransformersNLP
+  #   model_name: "bert"
+  #   model_weights: "./models/biobert"
+  #   cache_dir: null
+  # - name: LanguageModelTokenizer
+  #   intent_tokenization_flag: false
+  #   intent_split_symbol: "+"
+  # - name: LanguageModelFeaturizer
+
+  # ── Intent classification ─────────────────────────────────────────────────
+  - name: DIETClassifier
+    epochs: 100
+    constrain_similarities: true
+    model_confidence: softmax
+    entity_recognition: true
+    number_of_transformer_layers: 2
+    transformer_size: 256
+    use_masked_language_model: false
+
+  # ── Entity extraction ─────────────────────────────────────────────────────
+  - name: EntitySynonymMapper
+
+  - name: RegexEntityExtractor
+    use_lookup_tables: true
+    use_regexes: true
+
+  # ── Response selection ────────────────────────────────────────────────────
+  - name: ResponseSelector
+    epochs: 100
+    constrain_similarities: true
+
+  # ── Fallback ──────────────────────────────────────────────────────────────
+  - name: FallbackClassifier
+    threshold: 0.4
+    ambiguity_threshold: 0.1
+
+policies:
+  # ── Rule policy (highest priority) ───────────────────────────────────────
+  - name: RulePolicy
+    core_fallback_threshold: 0.4
+    core_fallback_action_name: "action_default_fallback"
+    enable_fallback_prediction: true
+
+  # ── Memoization ───────────────────────────────────────────────────────────
+  - name: MemoizationPolicy
+    max_history: 5
+
+  # ── TED policy (ML dialogue management) ──────────────────────────────────
+  - name: TEDPolicy
+    max_history: 8
+    epochs: 100
+    constrain_similarities: true
+    split_entities_by_comma: true
+    number_of_transformer_layers: 1
+    transformer_size: 128
+
+  # ── Unexpected intent policy ──────────────────────────────────────────────
+  - name: UnexpecTEDIntentPolicy
+    max_history: 5
+    epochs: 100

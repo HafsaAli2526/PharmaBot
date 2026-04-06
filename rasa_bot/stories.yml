@@ -1,0 +1,88 @@
+version: "3.1"
+
+stories:
+  - story: greet and ask adverse event
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_adverse_event
+      - action: action_search_adverse_events
+
+  - story: direct adverse event query
+    steps:
+      - intent: ask_adverse_event
+      - action: action_search_adverse_events
+
+  - story: direct clinical trial query
+    steps:
+      - intent: ask_trial_summary
+      - action: action_summarise_trial
+
+  - story: greet then trial query
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_trial_summary
+      - action: action_summarise_trial
+
+  - story: regulatory info
+    steps:
+      - intent: ask_regulatory_info
+      - action: action_get_regulatory_info
+
+  - story: formula analysis
+    steps:
+      - intent: ask_formula
+      - action: action_analyse_formula
+
+  - story: drug interaction query
+    steps:
+      - intent: ask_drug_interaction
+      - action: action_analyse_formula
+
+  - story: news query
+    steps:
+      - intent: ask_news
+      - action: action_search_news
+
+  - story: notification request
+    steps:
+      - intent: notify_event
+      - action: action_send_notification
+
+  - story: adverse event then notify
+    steps:
+      - intent: ask_adverse_event
+      - action: action_search_adverse_events
+      - intent: notify_event
+      - action: action_send_notification
+
+  - story: adverse event then goodbye
+    steps:
+      - intent: ask_adverse_event
+      - action: action_search_adverse_events
+      - intent: goodbye
+      - action: utter_goodbye
+
+  - story: out of scope
+    steps:
+      - intent: out_of_scope
+      - action: utter_out_of_scope
+
+  - story: multi-turn regulatory
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_regulatory_info
+      - action: action_get_regulatory_info
+      - intent: affirm
+      - action: action_get_regulatory_info
+
+  - story: formula then trial
+    steps:
+      - intent: ask_formula
+      - action: action_analyse_formula
+      - intent: ask_trial_summary
+      - action: action_summarise_trial
+      - intent: goodbye
+      - action: utter_goodbye

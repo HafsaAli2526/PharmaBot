@@ -1,0 +1,26 @@
+action_endpoint:
+  url: "http://localhost:5055/webhook"
+
+# ── Tracker store (PostgreSQL) ─────────────────────────────────────────────
+tracker_store:
+  type: SQL
+  dialect: "postgresql"
+  url: ${POSTGRES_HOST:-localhost}
+  db: ${POSTGRES_DB:-pharmaai}
+  username: ${POSTGRES_USER:-pharmaai}
+  password: ${POSTGRES_PASSWORD:-changeme}
+  event_broker:
+    type: pika
+    url: ${RABBITMQ_HOST:-localhost}
+    username: ${RABBITMQ_USER:-guest}
+    password: ${RABBITMQ_PASSWORD:-guest}
+    queues:
+      - rasa_events
+
+# ── Lock store (Redis) ─────────────────────────────────────────────────────
+lock_store:
+  type: redis
+  url: ${REDIS_HOST:-localhost}
+  port: 6379
+  password: ${REDIS_PASSWORD:-}
+  db: 1

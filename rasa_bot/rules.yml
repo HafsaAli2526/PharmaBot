@@ -1,0 +1,37 @@
+version: "3.1"
+
+rules:
+  - rule: Say goodbye on goodbye intent
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye
+
+  - rule: Say hello on greet
+    steps:
+      - intent: greet
+      - action: utter_greet
+
+  - rule: Handle out of scope
+    steps:
+      - intent: out_of_scope
+      - action: utter_out_of_scope
+
+  - rule: Adverse event query always routes to search action
+    steps:
+      - intent: ask_adverse_event
+      - action: action_search_adverse_events
+
+  - rule: Drug interaction query routes to formula action
+    steps:
+      - intent: ask_drug_interaction
+      - action: action_analyse_formula
+
+  - rule: News query routes to news search
+    steps:
+      - intent: ask_news
+      - action: action_search_news
+
+  - rule: Notification intent always fires notification
+    steps:
+      - intent: notify_event
+      - action: action_send_notification

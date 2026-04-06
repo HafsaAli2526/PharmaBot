@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: "PharmaAI"
+    orgId: 1
+    folder: "PharmaAI"
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /etc/grafana/provisioning/dashboards

@@ -1,0 +1,141 @@
+# PharmaAI Assistant – Main Configuration
+app:
+  name: PharmaAI Assistant
+  version: "1.0.0"
+  debug: false
+  log_level: INFO
+
+# ─── Hardware ─────────────────────────────────────────────────────────────────
+gpu:
+  device: "cuda:0"
+  mixed_precision: true # bf16 on H200
+  max_memory_gb: 60 # leave headroom on 80 GB H200
+
+# ─── Models ───────────────────────────────────────────────────────────────────
+models:
+  biobert:
+    path: "./models/biobert"
+    hf_id: "dmis-lab/biobert-v1.1"
+    dim: 768
+  clinicalbert:
+    path: "./models/clinicalbert"
+    hf_id: "emilyalsentzer/Bio_ClinicalBERT"
+    dim: 768
+  chemberta:
+    path: "./models/chemberta"
+    hf_id: "seyonec/ChemBERTa-zinc-base-v1"
+    dim: 768
+  slm:
+    path: "./models/slm"
+    hf_id: "microsoft/Phi-3-mini-4k-instruct"
+    max_new_tokens: 512
+    temperature: 0.2
+    top_p: 0.9
+  slm_finetuned:
+    path: "./models/slm_finetuned"
+
+# ─── Vector Index ─────────────────────────────────────────────────────────────
+index:
+  type: faiss # or annoy
+  dim: 2304 # 3 × 768 (biobert + clinicalbert + chemberta)
+  nlist: 256 # IVF clusters
+  nprobe: 32
+  path: "./data/index.faiss"
+  id_map_path: "./data/index_id_map.json"
+
+# ─── Databases ────────────────────────────────────────────────────────────────
+postgres:
+  host: "${POSTGRES_HOST:-localhost}"
+  port: 5432
+  database: "${POSTGRES_DB:-pharmaai}"
+  user: "${POSTGRES_USER:-pharmaai}"
+  password: "${POSTGRES_PASSWORD}"
+  pool_size: 20
+  max_overflow: 10
+
+redis:
+  host: "${REDIS_HOST:-localhost}"
+  port: 6379
+  db: 0
+  password: "${REDIS_PASSWORD:-}"
+  ttl_seconds: 3600
+
+# ─── Message Queue ────────────────────────────────────────────────────────────
+rabbitmq:
+  host: "${RABBITMQ_HOST:-localhost}"
+  port: 5672
+  user: "${RABBITMQ_USER:-guest}"
+  password: "${RABBITMQ_PASSWORD:-guest}"
+  vhost: "/"
+  queues:
+    ingestion: "pharmaai.ingestion"
+    embedding: "pharmaai.embedding"
+    notifications: "pharmaai.notifications"
+
+# ─── External APIs ────────────────────────────────────────────────────────────
+apis:
+  pubmed:
+    base_url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
+    api_key: "${PUBMED_API_KEY:-}"
+    rate_limit_per_second: 3
+  openfda:
+    base_url: "https://api.fda.gov"
+    api_key: "${OPENFDA_API_KEY:-}"
+    rate_limit_per_second: 4
+  clinical_trials:
+    base_url: "https://clinicaltrials.gov/api/v2"
+    rate_limit_per_second: 5
+  newsapi:
+    base_url: "https://newsapi.org/v2"
+    api_key: "${NEWSAPI_KEY}"
+    rate_limit_per_second: 1
+  google_cse:
+    api_key: "${GOOGLE_CSE_KEY}"
+    cx: "${GOOGLE_CSE_CX}"
+    rate_limit_per_second: 2
+  event_registry:
+    api_key: "${EVENT_REGISTRY_KEY:-}"
+
+# ─── Notifications ────────────────────────────────────────────────────────────
+notifications:
+  twilio:
+    account_sid: "${TWILIO_ACCOUNT_SID:-}"
+    auth_token: "${TWILIO_AUTH_TOKEN:-}"
+    from_number: "${TWILIO_FROM_NUMBER:-}"
+  slack:
+    webhook_url: "${SLACK_WEBHOOK_URL:-}"
+    channel: "#pharmaai-alerts"
+  sendgrid:
+    api_key: "${SENDGRID_API_KEY:-}"
+    from_email: "${SENDGRID_FROM_EMAIL:-alerts@pharmaai.internal}"
+  fcm:
+    server_key: "${FCM_SERVER_KEY:-}"
+
+# ─── API Server ───────────────────────────────────────────────────────────────
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  cors_origins:
+    - "http://localhost:3000"
+    - "https://pharmaai.internal"
+  rate_limit:
+    requests_per_minute: 60
+    burst: 20
+
+# ─── Rasa ─────────────────────────────────────────────────────────────────────
+rasa:
+  model_path: "./rasa_bot/models"
+  action_server_url: "http://localhost:5055/webhook"
+
+# ─── Monitoring ───────────────────────────────────────────────────────────────
+prometheus:
+  port: 9090
+  scrape_interval: 15s
+
+# ─── Ingestion ────────────────────────────────────────────────────────────────
+ingestion:
+  batch_size: 64
+  max_retries: 3
+  retry_backoff_seconds: 5
+  progress_file: "./data/ingestion_progress.json"

@@ -1,0 +1,68 @@
+version: "3.1"
+
+intents:
+  - ask_adverse_event
+  - ask_trial_summary
+  - ask_regulatory_info
+  - ask_formula
+  - ask_drug_interaction
+  - ask_news
+  - notify_event
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - out_of_scope
+
+entities:
+  - drug_name
+  - nct_id
+  - compound
+  - regulation_type
+
+slots:
+  drug_name:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: drug_name
+  nct_id:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: nct_id
+  compound:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: compound
+  search_results:
+    type: any
+    mappings:
+      - type: custom
+
+responses:
+  utter_greet:
+    - text: "Hello! I'm PharmaAI, your pharmaceutical intelligence assistant. How can I help you today?"
+  utter_goodbye:
+    - text: "Goodbye! Stay safe."
+  utter_default:
+    - text: "I'm sorry, I couldn't find relevant information. Could you rephrase your question?"
+  utter_out_of_scope:
+    - text: "That topic is outside my pharmaceutical expertise. I can help with adverse events, clinical trials, regulatory guidance, and drug formulas."
+
+actions:
+  - action_search_adverse_events
+  - action_summarise_trial
+  - action_get_regulatory_info
+  - action_analyse_formula
+  - action_send_notification
+  - action_search_news
+  - utter_greet
+  - utter_goodbye
+  - utter_default
+  - utter_out_of_scope
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

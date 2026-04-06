@@ -1,0 +1,3 @@
+# This .gitkeep file preserves the models/ directory structure
+# Users should run: python scripts/download_models.py
+# to populate this directory with BioBERT, ClinicalBERT, ChemBERTa, and Phi-3 models
